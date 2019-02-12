@@ -1,0 +1,72 @@
+#VRML V2.0 utf8
+
+#EXTERNPROTO SqSheet [
+#	field SFInt32 nx
+#	field SFInt32 ny
+#	field SFFloat d
+#  field SFColor color
+#]"p_sqs.wrl"
+
+PROTO SqSheet [
+	field SFInt32 nx 21
+	field SFInt32 ny 30
+	field SFFloat d 0.005
+  field SFColor color .5 .5 .5
+]
+{
+
+	DEF	Sheet Shape	{
+		geometry DEF lines IndexedLineSet{
+			coord Coordinate {}
+		}
+		appearance Appearance {
+			material Material {
+	      emissiveColor	IS	color	
+			}
+		}
+	}
+
+	DEF	Builder Script{
+		field SFInt32 nx IS	nx
+		field SFInt32 ny IS	ny
+		field SFFloat d IS d
+		field SFNode lines USE lines
+		url	"javascript:
+		  var points = new MFVec3f();
+		  var indexes = new MFInt32();
+      var px = 0;
+      var idx = 0;
+
+		  function initialize(){
+			  for (i=-nx; i<=nx; i++){
+				  points[px] = new SFVec3f(i*d, -ny*d, 0);
+          px++;
+          points[px] = new SFVec3f(i*d, ny*d, 0);
+          px++;
+          indexes[idx] = px-2;
+          idx++;
+          indexes[idx] = px-1;
+          idx++;
+          indexes[idx] = -1;
+          idx++
+			  }
+        for (i=-ny; i<=ny; i++){
+				  points[px] = new SFVec3f(-nx*d, i*d, 0);
+          px++;
+          points[px] = new SFVec3f(nx*d, i*d, 0);
+          px++;
+          indexes[idx] = px-2;
+          idx++;
+          indexes[idx] = px-1;
+          idx++;
+          indexes[idx] = -1;
+          idx++
+        
+        }
+        lines.coord.point = points;
+        lines.coordIndex = indexes;
+		  }
+		"
+	}
+
+}

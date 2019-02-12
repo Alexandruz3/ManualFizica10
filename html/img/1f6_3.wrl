@@ -1,0 +1,185 @@
+#VRML V2.0 utf8
+
+Viewpoint	{
+	position 0 0 30
+  fieldOfView	.2
+}
+
+EXTERNPROTO Vector [
+  eventIn SFVec3f setStart
+  eventIn SFVec3f setEnd
+  eventIn SFColor setStemColor
+  eventIn SFFloat setStemTransparency
+  eventIn SFColor setHeadColor
+  eventIn SFFloat setHeadTransparency
+  field SFVec3f startAt
+  field SFVec3f endAt
+  field SFFloat stemRadius
+  field SFFloat headSize
+  field SFFloat headRadius
+  field SFColor stemColor
+  field SFFloat stemTransparency
+  field SFColor headColor
+  field SFFloat headTransparency
+]"p_vector01.wrl"
+
+EXTERNPROTO Label[
+  field MFString text
+  field MFString sub
+  field SFVec3f position
+  field SFFloat size
+  field SFColor color
+]"p_label.wrl"
+
+EXTERNPROTO DLine [
+  field SFVec3f startAt
+  field SFVec3f endAt
+  field SFColor color
+  field SFInt32 steps
+]"p_dline.wrl"
+
+Transform	{
+	translation	-3 -2.3 0
+  children [
+		Label{
+			text "0"
+		  position -.2 -.2 0
+			size .4
+			color	0 0 0
+	  }
+		Label{
+			text "T"
+		  position 5 -.4 0
+			size .4
+			color	0 0 0
+	  }
+		Label{
+			text "p"
+		  position -.2 5 0
+			size .4
+			color	0 0 0
+	  }
+
+		Label{
+			text "lichid"
+		  position 3 2 0
+			size .4
+			color	0 0 0
+	  }
+
+		Label{
+			text "vapori"
+		  position 4 1.2 0
+			size .4
+			color	0 0 0
+	  }
+
+	  Vector {
+		  startAt	0 0 0
+			endAt	5 0 0
+			stemRadius .01
+			stemColor	0 0 0
+			headColor	0 0 0
+		}
+	  Vector {
+		  startAt	0 0 0
+			endAt	0 5 0
+			stemRadius .01
+			stemColor	0 0 0
+			headColor	0 0 0
+		}
+#    Shape	{
+#		  geometry DEF Ext Extrusion {
+#			  crossSection [
+#				  .01  .01
+#					.01 -.01
+#				 -.01 -.01
+#				 -.01  .01
+#				  .01  .01
+#				]
+#			}
+#			appearance Appearance	{
+#			  material Material	{
+#				  diffuseColor 1 0 0
+#				}
+#			}
+#		}
+
+    Shape	{
+		  geometry DEF Ext1 Extrusion {
+			  crossSection [
+				  .01  .01
+					.01 -.01
+				 -.01 -.01
+				 -.01  .01
+				  .01  .01
+				]
+			}
+			appearance Appearance	{
+			  material Material	{
+				  diffuseColor 1 0 0
+				}
+			}
+		}
+#    Shape	{
+#		  geometry DEF Ext2 Extrusion {
+#			  crossSection [
+#				  .01  .01
+#					.01 -.01
+#				 -.01 -.01
+#				 -.01  .01
+#				  .01  .01
+#				]
+#			}
+#			appearance Appearance	{
+#			  material Material	{
+#				  diffuseColor 1 0 0
+#				}
+#			}
+#		}
+		DEF	Builder Script {
+			eventOut MFVec3f spine_changed
+			eventOut MFVec3f spine1_changed
+			eventOut MFVec3f spine2_changed
+			directOutput TRUE
+			url	"javascript:
+			  var n = 100;
+				var dx = 2/n;
+			  function initialize(){
+					for (i=0; i<=n; i++){
+						x = .3 + i * dx;
+						y = Math.pow(x/2, 1.8);
+					  spine_changed[i] = new SFVec3f(x+.2, y+.1, 0);
+					} 
+					xt=x+.2;yt=y+.1;
+					for (i=0; i<=n; i++){
+						x = i * dx;
+						y = Math.pow(x/2, 1.8);
+					  spine1_changed[i] = new SFVec3f(x+xt, y+yt, 0);
+					} 
+					dx = .5/n;
+					for (i=0; i<=n; i++){
+						x = i * dx;
+						y = 10* Math.pow(x, 2);
+					  spine2_changed[i] = new SFVec3f(xt-x, y+yt, 0);
+					} 
+			  }
+			"
+#			ROUTE	Builder.spine_changed	TO Ext.set_spine
+			ROUTE	Builder.spine1_changed	TO Ext1.set_spine
+#			ROUTE	Builder.spine2_changed	TO Ext2.set_spine
+		}
+
+		DLine	{
+		  startAt	2.5 0 0 
+			endAt	2.5 1.38 0
+			color	0 0 0
+		}
+
+		DLine	{
+		  startAt	0 1.38 0 
+			endAt	2.5 1.38 0
+			color	0 0 0
+		}
+	]
+}

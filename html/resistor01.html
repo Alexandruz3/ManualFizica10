@@ -1,0 +1,31 @@
+<HTML>
+<HEAD>
+<TITLE>Resistor 01</TITLE>
+
+<SCRIPT language="JavaScript">
+  function change_value(newValue, newTolerance){
+    document.Scene.Engine.Nodes("R1").Fields("set_normValue") = newValue;
+    document.Scene.Engine.Nodes("R1").Fields("set_normTolerance") = newTolerance;
+  }
+</SCRIPT>
+
+</HEAD>
+<BODY>
+
+<EMBED name="Scene" src="img/2b2_2a.wrl" width=100% height=90%>
+
+<P align=center>
+<FORM name="input">
+  Rezisten&#355;a (&Omega;): <INPUT name="input_value" type="text" size=7 value=4700>&nbsp;&nbsp;
+  Toleran&#355;a (%): <INPUT name="input_tolerance" type="text" size=2 value=5>&nbsp;&nbsp; 
+  <INPUT name="input_btn" type="button" value="Arat&#259;&minus;mi!" onClick="change_value(input_value.value, input_tolerance.value)">
+</FORM>
+</P>
+</BODY>
+</HTML>
+
+
+
+
+
+

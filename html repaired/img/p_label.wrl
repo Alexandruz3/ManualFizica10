@@ -1,0 +1,56 @@
+#VRML V2.0 utf8
+
+#EXTERNPROTO Label[
+#  field MFString text
+#  field MFString sub
+#  field SFVec3f position
+#  field SFFloat size
+#  field SFColor color
+#]"p_label.wrl"
+
+PROTO Label[
+  field MFString text ""
+  field MFString sub ""
+  field SFVec3f position 0 0 0
+  field SFFloat size .02
+  field SFColor color 1 0 0
+]
+{
+  Transform {
+    translation IS position
+    children Billboard {
+      axisOfRotation 0 0 0
+      children [
+        Shape {
+          geometry Text {
+            string IS text
+            fontStyle FontStyle {
+              size IS size
+              justify "MIDDLE"
+            }
+          }
+          appearance DEF App Appearance {
+            material Material {
+              diffuseColor IS color
+            }
+          }
+        }
+        Transform {
+          translation .2 -.1 0
+          children [
+            Shape {
+              geometry Text {
+                string IS sub
+                fontStyle FontStyle {
+                  size .3
+                  justify "MIDDLE"
+                }
+              }
+              appearance USE App
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

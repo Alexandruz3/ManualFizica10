@@ -1,0 +1,57 @@
+#VRML V2.0 utf8
+
+#EXTERNPROTO Arrow [
+#  field SFVec3f position
+#  field SFFloat arrowAngle
+#  field SFFloat arrowLenght
+#  field SFColor color
+#  field SFFloat lenght
+#]"p_arrow.wrl"
+
+PROTO Arrow [
+  field SFVec3f position 0 0 0
+  field SFFloat arrowAngle .2
+  field SFFloat arrowLenght .01
+  field SFColor color 0 0 0
+  field SFFloat lenght .03
+]
+{
+  Shape {
+    geometry DEF geom IndexedLineSet {
+      coord Coordinate {}
+      coordIndex [
+        0 1 -1
+        0 2 -1
+        0 3 -1 
+      ]
+    }
+    appearance Appearance {
+      material Material {
+        emissiveColor IS color
+      }
+    }
+  }
+
+  DEF Builder Script{
+    field SFVec3f position IS position
+    field SFFloat lenght IS lenght
+    field SFFloat arrowAngle IS arrowAngle
+    field SFFloat arrowLenght IS arrowLenght
+    field SFNode geom USE geom
+    url "javascript:
+      var points = new MFVec3f();
+      function initialize(){
+        points[0] = new SFVec3f(position.x, position.y + lenght, position.z);
+        points[1] = new SFVec3f(position.x, position.y, position.z);
+        x = arrowLenght * Math.sin(arrowAngle);
+        y = position.y + lenght - arrowLenght * Math.cos(arrowAngle);
+        z = position.z;
+        points[2] = new SFVec3f(position.x + x, y, z);
+        points[3] = new SFVec3f(position.x - x, y, z);
+        geom.coord.point= points;
+      }
+    "
+  }
+}
+
+

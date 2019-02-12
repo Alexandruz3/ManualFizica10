@@ -1,0 +1,187 @@
+<HTML>
+<HEAD>
+<TITLE>IB. Alte provoc&#259;ri</TITLE>
+<STYLE>
+.challange {background: yellow}
+.activity {background: #ffffaa}
+.drag{position:relative;cursor:hand; font-weight: bold}
+</STYLE>
+
+<SCRIPT src="drag.js"></SCRIPT>
+<SCRIPT language="JavaScript">
+  document.onmousedown=dragIt;
+  document.onmouseup=endDrag;
+var dragOk=false;
+var element,x,y,tempX,tempY;
+var shiftX=80;
+var shiftY=20;
+
+function move(){
+  if (event.button==1&&dragOk){
+    element.style.pixelLeft=tempX+event.clientX-x;
+    element.style.pixelTop=tempY+event.clientY-y;
+    return false;
+  }
+}
+
+function dragIt(){
+  if (event.srcElement.className=="drag"){
+    dragOk=true;
+    element=event.srcElement;
+    tempX=element.style.pixelLeft;
+    tempY=element.style.pixelTop;
+    x=event.clientX;
+    y=event.clientY;
+    document.onmousemove=move;
+  }
+}
+
+function endDrag(){
+  dragOk=false;
+}
+
+</SCRIPT>
+</HEAD>
+<BODY>
+<TABLE width=100%>
+  <TR valign=top>
+    <TD nowrap><H3>Elemente de termodinamic&#259;.</H3></TD>
+    <TD><H3 align=right>No&#355;iuni termodinamice de baz&#259;</H3></H3>
+  </TR>
+</TABLE>
+<H2 class="challange"><I>Alte provoc&#259;ri</I></H2>
+
+<OL>
+  <P><BR><LI><B><I>Moleculele apei</I></B>
+     <P>Fiecare molecul&#259; de ap&#259; este alc&#259;tuit&#259; din doi atomi de hidrogen &#351;i unul de oxigen.
+     <P><B>a. </B>C&#226;t este masa molar&#259; a apei?
+     <P><B>b. </B>Densitatea apei lichide este 1000&nbsp;kg/m<SUP>3</SUP>. C&#226;t este distan&#355;a medie dintre moleculele vecine ale 
+     apei lichide?
+     <P><B>c. </B>Apa lichid&#259; este foarte pu&#355;in compresibil&#259;. Po&#355;i verifica aceasta &#238;ncerc&#226;nd s&#259; comprimi apa &#238;ntr-o 
+        sering&#259;. Estimeaz&#259; dimensiunile unei molecule de ap&#259;. 
+     <P><FONT size=-1><I>R&#259;spuns par&#355;ial:</I> <B>b. </B>0,31&nbsp;nm.</FONT>
+  <P><BR><LI><B><I>Aerul</I></B>
+     <P>Aerul atmosferic este un amestec alc&#259;tuit aproape &#238;n totalitate din molecule diatomice de oxigen &#351;i azot.
+     <P><B>a. </B>C&#226;t este frac&#355;ia molar&#259; a oxigenului &#238;n aerul atmosferic?
+     <P><B>b. </B>Densitatea aerului, &#238;n condi&#355;ii normale de temperatur&#259; &#351;i presiune, este 1,29&nbsp;kg/m<SUP>3</SUP>. 
+        C&#226;t este distan&#355;a medie dintre moleculele vecine ale aerului?
+     <P><B>c. </B>Aerul este foarte compresibil. Po&#355;i verifica aceasta &#238;ncerc&#226;nd s&#259; comprimi aerul &#238;ntr-o sering&#259;. Este &#238;n
+        acord acest fapt cu rezultatul pe care l-ai ob&#355;inut la &#238;ntrebarea <B>b </B>?
+     <P><FONT size=-1><I>R&#259;spuns par&#355;ial:</I> <B>a. </B>22%</FONT>
+  <P><BR><LI><B><I>Folia de aluminiu</I></B>
+     <P>&#206;n buc&#259;t&#259;rie este de mare ajutor folia de aluminiu. 
+     <P><B>a. </B>Estimeaz&#259; grosimea foliei de aluminiu folosit&#259; &#238;n buc&#259;t&#259;rie.
+     <P><B>b. </B>Densitatea aluminiului este 2700&nbsp;kg/m<SUP>3</SUP>, iar masa sa atomic&#259; relativ&#259; este 27. Estimeaz&#259; 
+        c&#226;te straturi de atomi de aluminiu sunt pe grosimea foliei.
+  <P><BR><LI><B><I>&#350;i tu e&#351;ti un sistem termodinamic!</I></B>
+     <P>Prive&#351;te atent &#238;n jurul t&#259;u &#351;i identific&#259; sistemele termodinamice cu care interac&#355;ionezi termic. De ce oare nu ajungi
+        &#238;n echilibru termic cu acestea?
+  <P><BR><LI><B><I>&#206;n&#355;elesuri amestecate!</I></B>
+     <P>&#206;n r&#226;ndurile tabelului de mai jos au fost al&#259;turate no&#355;iuni cu &#238;n&#355;elesuri diferite:
+     <P><TABLE border=1 cellpadding=4>
+          <TR>
+            <TD><DIV class="drag">constanta lui Avogadro</DIV></TD>
+            <TD>grupare de 6,022&middot;10<SUP>23</SUP> particule</TD>
+          </TR>
+          <TR>
+            <TD><DIV class="drag">unitatea atomic&#259; de mas&#259;</DIV></TD>
+            <TD>cantitatea 6,022&middot;10<SUP>23</SUP> mol<SUP>-1</SUP></TD>
+          </TR>
+          <TR>
+            <TD><DIV class="drag">mas&#259; molecular&#259; relativ&#259;</DIV></TD>
+            <TD>masa unui mol</TD>
+          </TR>
+          <TR>
+            <TD><DIV class="drag">mas&#259; molar&#259;</DIV></TD>
+            <TD>1/12 din masa unui atom de <SUP>12</SUP>C</TD>
+          </TR>
+          <TR>
+            <TD><DIV class="drag">mas&#259; molecular&#259;</DIV></TD>
+            <TD>masa unei molecule</TD>
+          </TR>
+          <TR>
+            <TD><DIV class="drag">mas&#259; atomic&#259; relativ&#259;</DIV></TD>
+            <TD>masa unui atom</TD>
+          </TR>
+          <TR>
+            <TD><DIV class="drag">mol</DIV></TD>
+            <TD>raportul dintre masa molecular&#259; &#351;i unitatea atomic&#259; de mas&#259;</TD>
+          </TR>
+          <TR>
+            <TD><DIV class="drag">mas&#259; atomic&#259;</DIV></TD>
+            <TD>raportul dintre masa atomic&#259; &#351;i unitatea atomic&#259; de mas&#259;</TD>
+          </TR>
+        </TABLE>
+     <P>Aranjeaz&#259; tabelul astfel &#238;nc&#226;t &#238;n fiecare r&#226;nd al acestuia s&#259; fie al&#259;turi no&#355;iuni cu acela&#351;i &#238;n&#355;eles!   
+  <P><BR><LI><B><I>Temperatura ta!</I></B>
+     <P>C&#226;nd ai o zi liber&#259;, folose&#351;te un termometru medical &#351;i m&#259;soar&#259; pe parcursul zilei, din or&#259; &#238;n or&#259;, temperatura
+        corpului t&#259;u la nivelul pielii de sub bra&#355;. Noteaz&#259; &#351;i temperatura din acel moment al aerului din camer&#259;, indicat&#259; de
+        un termometru de camer&#259;.
+     <P>Reprezint&#259;, pe acela&#351;i grafic, valorile m&#259;surate.
+     <P>&#206;n care perioad&#259; a zilei temperatura ta este maxim&#259;? &#206;n care este minim&#259;?
+     <P>De ce oare temperatura ta se men&#355;ine mereu mai mare dec&#226;t cea a aerului din camer&#259;?
+  <P><BR><LI><B><I>Febra &#351;i hipotermia</I></B>
+     <P>Temperatura corporal&#259; normal&#259;, m&#259;surat&#259; la nivelul pielii de sub bra&#355;, este 36,5&deg;C, cu varia&#355;ii admisibile &#238;n plus
+        sau &#238;n minus de 0,5&deg;C. Dep&#259;&#351;irea acestor limite semnaleaz&#259; o stare anormal&#259; a organismului.
+     <P>Intereseaz&#259;&minus;te &#238;n leg&#259;tur&#259; cu consecin&#355;ele negative pe care le poate avea o temperatur&#259; corporal&#259; prea mare
+        (febra) sau prea mic&#259; (hipotermia).
+  <P><BR><LI><B><I>Fahrenheit 100</I></B>
+     <P>Unii sus&#355;in c&#259; Daniel Fahrenheit &#351;i&minus;ar fi ales scara de temperatur&#259; care &#238;i poart&#259; numele astfel &#238;nc&#226;t temperatura
+        corporal&#259; normal&#259; s&#259; fie 100&deg;F.
+        <P><B>a. </B>Verific&#259; dac&#259; &#238;ntr&minus;adev&#259;r temperatura corporal&#259; normal&#259; este 100&deg;F.
+        <P><B>b. </B>G&#259;se&#351;te rela&#355;ia general&#259; de transformare &#238;ntre temperaturi &#238;n sc&#259;rile Celsius &#351;i Fahrenheit.
+     <P><FONT size=-1><I>R&#259;spuns par&#355;ial:</I> <B>b. </B>t(&deg;F) = 1,8 t(&deg;C) + 32&deg;F</FONT>
+  <P><BR><LI><B><I>Dublarea temperaturii</I></B>
+     <P>Gazul dintr&minus;un recipient are temperatura 20&deg;C. C&#226;t este temperatura gazului dup&#259; o opera&#355;ie de dublare
+        a temperaturii acestuia?
+     <P><FONT size=-1><I>R&#259;spuns:</I> 313,15&deg;C! Dac&#259; rezultatul &#238;&#355;i pare surprinz&#259;tor, &#238;ncearc&#259; s&#259; spui c&#226;t este dublul
+        temperaturii 0&deg;C, sau dublul temperaturii -10&deg;C. Este oare natural&#259; scara Celsius?</FONT>
+  <P><BR><LI><B><I>&#206;nc&#259;lzirea &#351;i r&#259;cirea pe scara Kelvin</I></B>
+     <P>Exprim&#259;, &#238;n kelvini, diferen&#355;a de temperatur&#259; dintre fierberea apei &#351;i topirea ghe&#355;ii, la presiune atmosferic&#259; normal&#259;.
+     <P>Arat&#259;, pornind de la rela&#355;ia de transformare &#238;ntre sc&#259;rile Celsius &#351;i Kelvin, c&#259;:
+        <CENTER><IMG src="img/e1b_p1.gif"></CENTER>
+  <P><BR><LI><B><I>Ilustrarea agita&#355;iei termice</I></B>
+     <P>Agita&#355;ia termic&#259; este un proces dinamic, dificil de descris cu desene statice. Pentru o reprezentare dinamic&#259; a agita&#355;iei
+        termice pot fi de folos sisteme fizice cu comportare asem&#259;n&#259;toare (modele fizice).
+        <P><B>a. </B>Pune c&#226;teva mingi de ping&minus;pong &#238;ntr&minus;o colivie &#351;i sufl&#259; aer &#238;nspre colivie cu un usc&#259;tor de p&#259;r
+           sau cu un ventilator, ca &#238;n figura 1.
+           <P><TABLE>
+             <TR valign=bottom>
+               <TD><IMG src="img/1b_p1.jpg" hspace=4></TD>
+               <TD><FONT size=-1><I><B>&nbsp;Figura 1. </B>Model fizic pentru ilustrarea agita&#355;iei termice.</I></FONT></TD>
+             </TR>
+           </TABLE>
+           <P>Observ&#259; agita&#355;ia mingilor. Aceasta se aseam&#259;n&#259; &#238;n multe privin&#355;e cu agita&#355;ia termic&#259; la nivel molecular. Ce se &#238;nt&#226;mpl&#259;
+              cu energia cinetic&#259; a mingilor de ping&minus;pong dac&#259; &#238;ntrerupi jetul de aer?
+        <P><B>b. </B>Uneori este util&#259; o reprezentare folosind un calculator (model virtual). Formeaz&#259; o echip&#259; &#351;i realiza&#355;i
+           o simulare c&#226;t mai realist&#259; a agita&#355;iei termice (figura 2).
+           <P><IMG src="img/vrmla.gif" align=top>
+              <A href="img/1b_p2.wrl" target=new><IMG src="img/1b_p2.jpg" border=0 hspace=14></A>
+              <BR clear=all><FONT size=-1><I><B>&nbsp;Figura 2. </B>Modelarea virtual&#259; a agita&#355;iei termice.</I></FONT></P>
+           <P>Analiza&#355;i critic care caracteristici ale agita&#355;iei termice au fost simulate realist, care nu &#351;i care au fost
+              complet ignorate.
+</OL>
+
+</BODY>
+</HTML>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

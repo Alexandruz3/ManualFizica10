@@ -1,0 +1,158 @@
+#VRML V2.0 utf8
+
+EXTERNPROTO SqSheet [
+	field SFInt32 nx
+	field SFInt32 ny
+	field SFFloat d
+  field SFColor color
+]"p_sqs.wrl"
+
+EXTERNPROTO Arrow [
+  field SFVec3f position
+  field SFFloat arrowAngle
+  field SFFloat arrowLenght
+  field SFColor color
+  field SFFloat lenght
+]"p_arrow.wrl"
+
+EXTERNPROTO Label[
+  field MFString text
+  field MFString sub
+  field SFVec3f position
+  field SFFloat size
+  field SFColor color
+]"p_label.wrl"
+
+Viewpoint	{
+  position .0025 .0025 .5
+	fieldOfView	.1
+}
+
+SqSheet	{
+  nx 60
+	ny 40
+	d	.005
+}
+
+Transform	{
+  translation	.0025 .0025 -1e-6
+	children [
+	  Shape	{
+		  geometry Box {
+			  size .005 .005 1e-6
+			}
+			appearance Appearance {
+			  material Material	{
+					transparency .5
+				}
+			}
+		}
+	]
+}
+
+Transform	{
+	translation	.0025 .0025 0
+  children [
+	  DEF short_arrow Arrow	{
+			color	0 0 0
+			lenght .005
+			arrowLenght	.001
+		}
+	]
+}
+
+Transform	{
+	translation	.0025 .0025 0
+	rotation 0 0 1 -.785
+  children [
+	  DEF	long_arrow Arrow {
+		  color	0 0 0
+			lenght .007
+			arrowLenght	.001
+		}
+	]
+}
+
+Transform	{
+	translation	.0025 .0025 0
+	rotation 0 0 1 -1.57
+  children USE short_arrow
+}
+
+Transform	{
+	translation	.0025 .0025 0
+	rotation 0 0 1 -2.36
+  children USE long_arrow
+}
+
+Transform	{
+	translation	.0025 .0025 0
+	rotation 0 0 1 -3.14
+  children USE short_arrow
+}
+
+Transform	{
+	translation	.0025 .0025 0
+	rotation 0 0 1 2.36
+  children USE long_arrow
+}
+
+Transform	{
+	translation	.0025 .0025 0
+	rotation 0 0 1 1.57
+  children USE short_arrow
+}
+
+Transform	{
+	translation	.0025 .0025 0
+	rotation 0 0 1 .785
+  children USE long_arrow
+}
+
+Label	{
+	text "1"
+	size .004
+	position .009 .007 0
+}
+
+Label	{
+	text "2"
+	size .004
+	position .009 .0015 0
+}
+
+Label	{
+	text "3"
+	size .004
+	position .009 -.004 0
+}
+
+Label	{
+	text "4"
+	size .004
+	position 0.0025 -.005 0
+}
+
+Label	{
+	text "5"
+	size .004
+	position -.004 -.004 0
+}
+
+Label	{
+	text "6"
+	size .004
+	position -.004 .0015 0
+}
+
+Label	{
+	text "7"
+	size .004
+	position -.004 .007 0
+}
+
+Label	{
+	text "8"
+	size .004
+	position .0025 .0075 0
+}

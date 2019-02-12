@@ -1,0 +1,151 @@
+#VRML V2.0 utf8
+
+#EXTERNPROTO Vector [
+#  eventIn SFVec3f setStart
+#  eventIn SFVec3f setEnd
+#  eventIn SFColor setStemColor
+#  eventIn SFFloat setStemTransparency
+#  eventIn SFColor setHeadColor
+#  eventIn SFFloat setHeadTransparency
+#  field SFVec3f startAt
+#  field SFVec3f endAt
+#  field SFFloat stemRadius
+#  field SFFloat headSize
+#  field SFFloat headRadius
+#  field SFColor stemColor
+#  field SFFloat stemTransparency
+#  field SFColor headColor
+#  field SFFloat headTransparency
+#]"p_vector01.wrl"
+
+PROTO Vector [
+  eventIn SFVec3f setStart
+  eventIn SFVec3f setEnd
+  eventIn SFColor setStemColor
+  eventIn SFFloat setStemTransparency
+  eventIn SFColor setHeadColor
+  eventIn SFFloat setHeadTransparency
+  field SFVec3f startAt 0 0 0
+  field SFVec3f endAt 0 1 0
+  field SFFloat stemRadius .02
+  field SFFloat headSize .2
+  field SFFloat headRadius .06
+  field SFColor stemColor 1 1 1
+  field SFFloat stemTransparency 0
+  field SFColor headColor 1 1 1
+  field SFFloat headTransparency 0
+]
+{
+  Group {
+    children [
+      DEF Stem Transform {
+        children [
+          Shape {
+            geometry Cylinder {
+              radius IS stemRadius
+              height 1.0
+            }
+            appearance Appearance {
+              material DEF StemMat Material {
+                diffuseColor IS stemColor
+                transparency IS stemTransparency
+              }
+            }
+          }
+        ]
+      }
+
+      DEF Head Transform {
+        children [
+          Shape {
+            geometry Cone {
+              bottomRadius IS headRadius
+              height 1
+            }
+            appearance Appearance {
+              material DEF HeadMat Material {
+                diffuseColor IS headColor
+                transparency IS headTransparency
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+
+  Script {
+    eventIn SFVec3f setStart IS setStart
+    eventIn SFVec3f setEnd IS setEnd
+    eventIn SFColor setStemColor IS setStemColor
+    eventIn SFFloat setStemTransparency IS setStemTransparency
+    eventIn SFColor setHeadColor IS setHeadColor
+    eventIn SFFloat setHeadTransparency IS setHeadTransparency
+    field SFVec3f startAt IS startAt
+    field SFVec3f endAt IS endAt
+    field SFFloat headSize IS headSize
+    field SFNode Stem USE Stem
+    field SFNode Head USE Head
+    field SFNode stemMat USE StemMat
+    field SFNode headMat USE HeadMat
+    directOutput TRUE
+    url "javascript:
+      function initialize() {
+        update();
+      }
+
+      function setStart(newStart){
+        startAt = newStart;
+        update();        
+      }      
+
+      function setEnd(newEnd){
+        endAt = newEnd;
+        update();
+      }
+
+      function setStemColor(newColor){
+        stemMat.diffuseColor = newColor;
+      } 
+
+      function setStemTransparency(newTransparency){
+        stemMat.transparency = newTransparency;
+      }
+
+      function setHeadColor(newColor){
+        headMat.diffuseColor = newColor;
+      }
+
+      function setHeadTransparency(newTransparency){
+        headMat.transparency = newTransparency;
+      }
+
+      function update(){
+        Head.scale = new SFVec3f(1, headSize, 1);
+
+        var vec = endAt.subtract(startAt);
+        var mag = vec.length();
+
+        Stem.scale = new SFVec3f(1, mag - headSize, 1);
+
+        var ver = vec.divide(mag);
+        var dv = ver.multiply((mag - headSize)/2);
+        var trans = startAt.add(dv);
+
+        Stem.translation = trans;
+
+        var rot = new SFRotation(new SFVec3f(0, 1, 0), vec);
+
+        Stem.rotation = rot;
+        Head.rotation = rot;
+
+        dv = ver.multiply(headSize/2.0);
+        trans = endAt.subtract(dv); 
+
+        Head.translation = trans;
+      }
+    "
+  }
+}
+
+

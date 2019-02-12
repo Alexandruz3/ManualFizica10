@@ -1,0 +1,58 @@
+#VRML V2.0 utf8
+
+#EXTERNPROTO DLine [
+#  field SFVec3f startAt
+#  field SFVec3f endAt
+#  field SFColor color
+#  field SFInt32 steps
+#]"p_dline.wrl"
+
+PROTO DLine [
+  field SFVec3f startAt 0 0 0
+  field SFVec3f endAt 0 .05 0
+  field SFColor color 0 0 0
+  field SFInt32 steps 21
+]
+{
+  Shape {
+    geometry DEF geom IndexedLineSet {
+      coord Coordinate {}
+    }
+    appearance Appearance {
+      material Material {
+        emissiveColor IS color
+      }
+    }
+  }
+
+  DEF Builder Script {
+    field SFVec3f startAt IS startAt
+    field SFVec3f endAt IS endAt
+    field SFInt32 steps IS steps
+    field SFNode geom USE geom
+    url "javascript:
+      var newPoints = new MFVec3f();
+      var newIndexes = new MFInt32();
+      var idx = 0;
+      var dx = (endAt.x - startAt.x) / steps;
+      var dy = (endAt.y - startAt.y) / steps;
+      var dz = (endAt.z - startAt.z) / steps;
+
+      function initialize(){
+        for (i=0; i<=steps; i++){
+          newX = startAt.x + i*dx;
+          newY = startAt.y + i*dy;
+          newZ = startAt.z + i*dz;
+          newPoints[i] = new SFVec3f(newX, newY, newZ);
+        }
+        for (i=0; i<steps/2; i++){
+          newIndexes[3*i] = 2*i;
+          newIndexes[3*i+1] = 2*i+1;
+          newIndexes[3*i+2] = -1;
+        }
+        geom.coord.point = newPoints;
+        geom.coordIndex = newIndexes;
+      }
+    "
+  }
+}

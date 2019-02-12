@@ -1,0 +1,342 @@
+#VRML V2.0 utf8
+
+PROTO	R [
+	eventIn	MFInt32	set_value
+	eventIn	SFFloat	set_normValue
+	eventIn	SFFloat	set_normTolerance
+	field MFInt32 value	[4 7 2 5]
+	field	MFFloat	terminals [0 40]
+]
+{
+  Group	{
+  	children [
+		  Transform	{
+				scale	.47 .47 .47
+				children [
+					DEF	RBody Shape	{
+							appearance DEF Laque Appearance	{
+								material Material	{
+									diffuseColor .7 .5 .4
+									shininess	.1
+									specularColor	.4 .3 .2
+								}
+							}
+							geometry Cylinder	{
+								radius .0020
+								height .0100
+							}
+						}
+
+					Transform	{
+						translation	0 .0041 0
+						children Shape{
+							appearance USE Laque
+							geometry Sphere	{ radius .0023 }
+						}
+					}
+
+					Transform	{
+						translation	0 -.0041 0
+						children Shape{
+							appearance USE Laque
+							geometry Sphere	{ radius .0023 }
+						}
+					}
+
+					Transform {
+						translation	0 .0041 0
+						children [
+							DEF FirstBand Shape	{
+								geometry Cylinder	{
+									radius .0024
+									height .0010
+									top	FALSE
+									bottom FALSE
+								}
+								appearance Appearance	{}
+							}
+						]
+					}
+
+					Transform {
+						translation	0 .0020 0
+						children [
+							DEF SecondBand Shape	{
+								geometry Cylinder	{
+									radius .0021
+									height .0010
+									top	FALSE
+									bottom FALSE
+								}
+								appearance Appearance	{}
+							}
+						]
+					}
+
+					Transform {
+						translation	0 .0000 0
+						children [
+							DEF ThirdBand Shape	{
+								geometry Cylinder	{
+									radius .0021
+									height .0010
+									top	FALSE
+									bottom FALSE
+								}
+								appearance Appearance	{}
+							}
+						]
+					}
+
+					Transform {
+						translation	0 -.0020 0
+						children [
+							DEF ForthBand Shape	{
+								geometry Cylinder	{
+									radius .0021
+									height .0010
+									top	FALSE
+									bottom FALSE
+								}
+								appearance Appearance	{}
+							}
+						]
+					}
+				]
+			}
+
+			DEF	BlackApp Appearance{
+			  material Material	{
+					diffuseColor 0 0 0
+				}
+			}
+
+			DEF	BrownApp Appearance{
+				material Material	{
+					diffuseColor .5 .2 .1
+				}
+			}
+
+			DEF	RedApp Appearance {
+				material Material {
+					diffuseColor 1 0 0 
+				}
+			}
+
+			DEF	OrangeApp Appearance {
+				material Material {
+					diffuseColor 1 .4 .2
+				}
+			}
+
+			DEF	YellowApp Appearance {
+				material Material {
+					diffuseColor 1 1 0 
+				}
+			}
+
+			DEF	GreenApp Appearance {
+				material Material {
+					diffuseColor 0 1 0
+				}
+			}
+
+			DEF	BlueApp Appearance {
+				material Material {
+					diffuseColor 0 0 1 
+				}
+			}
+
+			DEF	VioletApp Appearance {
+				material Material {
+					diffuseColor 1 0 1 
+				}
+			}
+
+			DEF	GrayApp Appearance {
+				material Material {
+					diffuseColor .5 .5 .5 
+				}
+			}
+
+			DEF	WhiteApp Appearance {
+				material Material {
+					diffuseColor 1 1 1 
+				}
+			}
+
+			DEF	GoldApp Appearance {
+				material Material {
+			  	ambientIntensity	0.25
+			  	diffuseColor	0.4 0.3 0
+			  	specularColor	0.8 0.7 0.6
+			  	shininess	0.1
+				}
+			}
+
+			DEF	SilverApp Appearance {
+				material Material {
+			  	ambientIntensity	0.25
+			  	diffuseColor	0.4 0.4 0.4
+			  	specularColor	0.8 0.8	0.8
+			  	shininess	0.1
+				}
+			}
+
+			DEF	TranspApp Appearance {
+				material Material	{
+					diffuseColor 0 0 0
+					transparency 1
+				}
+			}
+
+			DEF	MetalApp Appearance {
+				material Material	{
+					diffuseColor .7 .7 .7
+					shininess	.2
+					specularColor	.9 .9 .9
+				}
+			}
+
+			DEF	newGroup Group {}
+
+    ]
+	}
+
+
+	DEF	Build Script{
+		eventIn	MFInt32	set_value IS set_value
+		eventIn	SFFloat	set_normValue IS set_normValue
+		eventIn	SFFloat	set_normTolerance IS set_normTolerance
+		field	SFNode newGroup USE	newGroup
+		field	MFInt32 value IS	value
+		field	MFFloat	terminals IS terminals
+		field	SFNode BlackApp USE BlackApp
+		field	SFNode BrownApp USE	BrownApp
+		field	SFNode RedApp USE	RedApp
+		field	SFNode OrangeApp USE	OrangeApp
+		field	SFNode YellowApp USE	YellowApp
+		field	SFNode GreenApp USE	GreenApp
+		field	SFNode BlueApp USE	BlueApp
+		field	SFNode VioletApp USE	VioletApp
+		field	SFNode GrayApp USE	GrayApp
+		field	SFNode WhiteApp USE	WhiteApp
+		field	SFNode GoldApp USE GoldApp
+		field	SFNode SilverApp USE SilverApp
+		field	SFNode TranspApp USE TranspApp
+		field	SFNode MetalApp USE	MetalApp
+		field MFNode app_changed []
+		eventOut SFNode app1_changed
+		eventOut SFNode app2_changed
+		eventOut SFNode app3_changed
+		eventOut SFNode app4_changed
+		eventOut SFNode	terminals_changed
+		url	"javascript:
+
+		function initialize(){
+			update();
+		}
+
+		function set_value(newValue){
+			value = newValue;
+			update();
+		}
+
+		function set_normValue(newValue){
+      var exponent = Math.floor(Math.log(Math.abs(newValue))/Math.LN10);
+			if(newValue==0) exponent=0;
+
+			var mantisa = newValue/Math.pow(10, exponent);
+			if (mantisa==10) {
+			  mantisa = 1;
+				exponent += 1;
+			}
+
+			var digits = mantisa.toString();
+
+			value[0] = digits[0];
+			value[1] = digits[2];
+			value[2] = exponent - 1;
+
+			update();
+	  }
+
+		function set_normTolerance(newValue){
+		  value[3] = newValue;
+			update();
+		}
+
+		function update(){
+			for (i=0; i<=2; i++){
+				if (value[i] == -2) {app_changed[i] = SilverApp};
+				if (value[i] == -1) {app_changed[i] = GoldApp};
+				if (value[i] == 0) {app_changed[i] = BlackApp};
+				if (value[i] == 1) {app_changed[i] = BrownApp};
+				if (value[i] == 2) {app_changed[i] = RedApp};
+				if (value[i] == 3) {app_changed[i] = OrangeApp};
+				if (value[i] == 4) {app_changed[i] = YellowApp};
+				if (value[i] == 5) {app_changed[i] = GreenApp};
+				if (value[i] == 6) {app_changed[i] = BlueApp};
+				if (value[i] == 7) {app_changed[i] = VioletApp};
+				if (value[i] == 8) {app_changed[i] = GrayApp};
+				if (value[i] == 9) {app_changed[i] = WhiteApp};
+			}
+			app1_changed = app_changed[0];
+			app2_changed = app_changed[1];
+			app3_changed = app_changed[2];
+
+			if (value[3] ==  1) {app4_changed = BrownApp};
+			if (value[3] ==  2) {app4_changed = RedApp};
+			if (value[3] ==  5) {app4_changed = GoldApp};
+			if (value[3] == 10) {app4_changed = SilverApp};
+			if (value[3] == 20) {app4_changed = TranspApp};
+
+			l = terminals[1] / 1000;
+
+			if (Math.round(terminals[0]) == 0) newGroup.addChildren = Browser.createVrmlFromString(
+				'Shape{'+ 
+				'		geometry Cylinder {'+ 
+				'			radius .0002'+ 
+				'			height '+ l + 
+				'		}'+ 
+				'		appearance Appearance {'+
+			  ' 		material Material {'+
+			  '				diffuseColor .7 .7 .7'+
+			  '				shininess .2'+
+			  '				specularColor .9 .9 .9'+
+			  '     }'+
+			  '   }'+ 
+				'}');
+
+				l = terminals[1] * 2.4; 
+
+			if (Math.round(terminals[0]) == 1) newGroup.addChildren = Browser.createVrmlFromString(
+				'Transform { scale .00021 .00021 .00021 children Shape{'+ 
+				'		geometry Extrusion {'+ 
+				'			crossSection ['+
+				'       1 0, .92 -.38, .71 -.71, .38 -.92, 0 -1, -.38 -.92, -.71 -.71, -.92 -.38, -1 0, -.92 .38, -.71 .71, -.38 .92, 0 1, .38 .92, .71 .71, .92 .38, 1 0'+
+			  '     ]'+   
+				'			spine ['+
+				'       0'+(-l)+'-25, 0'+(-l)+'-3, 0'+(-l+1)+'-1, 0 '+(-l+3)+' 0, 0 '+(l-3)+' 0, 0 '+(l-1)+' -1, 0 '+l+' -3, 0 '+l+' -25'+
+			  '     ]'+
+			  '     creaseAngle 2'+  
+				'		}'+ 
+				'		appearance Appearance {'+
+			  ' 		material Material {'+
+			  '				diffuseColor .7 .7 .7'+
+			  '				shininess .2'+
+			  '				specularColor .9 .9 .9'+
+			  '     }'+
+			  '   }'+ 
+				'}}');
+
+		}
+
+		"
+	}
+
+	ROUTE Build.app1_changed TO	FirstBand.appearance
+	ROUTE	Build.app2_changed TO	SecondBand.appearance
+	ROUTE Build.app3_changed TO	ThirdBand.appearance
+	ROUTE	Build.app4_changed TO	ForthBand.appearance
+}

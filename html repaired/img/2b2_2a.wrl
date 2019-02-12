@@ -1,0 +1,26 @@
+#VRML V2.0 utf8
+
+EXTERNPROTO	R [
+	eventIn	MFInt32	set_value
+	eventIn	SFFloat	set_normValue
+	field MFInt32 value
+	field	MFFloat	terminals
+]"proto_r.wrl"
+
+Background {
+  skyColor .33 .33 .33
+}
+
+Viewpoint	{
+  position 0 0 .2
+	fieldOfView	.1
+}
+
+Transform{
+  rotation	0 0 1 1.57
+  children [
+		DEF R1 R {
+		  terminals [0 30]
+	  }
+	]
+}

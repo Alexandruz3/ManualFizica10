@@ -1,0 +1,39 @@
+#VRML V2.0 utf8
+
+#EXTERNPROTO Line [
+#  field SFVec3f startAt
+#  field SFVec3f endAt
+#  field SFColor color
+#]"p_line.wrl"
+
+
+PROTO Line [
+  field SFVec3f startAt 0 0 0
+  field SFVec3f endAt   .1 .1 .1
+  field SFColor color 0 0 0
+]
+{
+  Shape {
+    geometry DEF lineG IndexedLineSet {
+      coord Coordinate {}
+      coordIndex [0 1 -1]
+    }
+    appearance Appearance {
+      material Material {
+        emissiveColor IS color
+      }
+    }
+  }
+
+  DEF Builder Script {
+    field SFVec3f startAt IS startAt
+    field SFVec3f endAt IS endAt
+    field SFNode lineG USE lineG
+    url "javascript:
+      var points = new MFVec3f();
+      points[0] = startAt;
+      points[1] = endAt;
+      lineG.coord.point = points;
+    "
+  }
+}

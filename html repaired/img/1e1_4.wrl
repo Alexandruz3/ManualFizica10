@@ -1,0 +1,289 @@
+#VRML V2.0 utf8
+
+Viewpoint	{
+	position 0 10.8 48
+	orientation	1 0 0 -.2
+	fieldOfView	.18
+}
+
+DEF	B Group{
+	children [
+Transform	{
+  translation	3.5 1.5 0
+	children [
+
+DEF	Box Transform	{
+	children [
+		Shape	{
+			geometry DEF box IndexedLineSet	{
+				coord	Coordinate {}
+				coordIndex [
+					0 1 2 3 0 4 5 6 7 4	-1
+					3 7 -1
+					2 6 -1
+					1 5 -1
+				]
+			}
+			appearance Appearance	{
+				material Material	{
+					emissiveColor	.5 .5 .5
+				}
+			}
+		}
+	]
+}
+
+DEF	Particles Transform	{}
+
+]}
+
+DEF	Timer TimeSensor {
+	cycleInterval	1
+	loop TRUE
+}
+
+DEF	Builder Script {
+	eventIn	SFTime tick
+	field	SFNode Timer USE Timer
+	field	SFNode box USE box
+	field	SFNode Particles USE Particles
+	url	"javascript:
+		var boxSize = new SFVec3f(5, 4, 4);
+		var hx = boxSize.x/2;
+		var hy = boxSize.y/2;
+		var hz = boxSize.z/2;
+		var nParticles = 100;
+		var boxVertex = new MFVec3f();
+		var boxIndex = new MFInt32();
+		var firstTime = true;
+		var lastTime = 0;
+		var dt = 0.0;
+		var v = new MFVec3f();
+		var sdf = 1.4;
+
+		var nSteps = 0;
+		var step = 0;
+
+		function initialize(){
+			boxVertex[0] = new SFVec3f(-hx, -hy,  hz);
+			boxVertex[1] = new SFVec3f( hx, -hy,  hz);
+			boxVertex[2] = new SFVec3f( hx,  hy,  hz);
+			boxVertex[3] = new SFVec3f(-hx,  hy,  hz);
+			boxVertex[4] = new SFVec3f(-hx, -hy, -hz);
+			boxVertex[5] = new SFVec3f( hx, -hy, -hz);
+			boxVertex[6] = new SFVec3f( hx,  hy, -hz);
+			boxVertex[7] = new SFVec3f(-hx,  hy, -hz);
+
+			box.coord.point = boxVertex;
+
+			objString = 'Transform{children Shape{geometry Sphere{radius .04}appearance Appearance{material Material{diffuseColor 0 0 0}}}}';
+
+			for (var i=0; i<nParticles; i++){
+				newNode = Browser.createVrmlFromString(objString);
+				Particles.children[i] = newNode[0];
+				Particles.children[i].translation = new SFVec3f(2*hx*(-.5 + Math.random()), 
+															  2*hy*(-.5 + Math.random()), 
+															  2*hz*(-.5 + Math.random()));
+			  
+				v[i] = new SFVec3f(sdf*(-2 + 4*Math.random()),
+													 sdf*(-2 + 4*Math.random()),
+													 sdf*(-2 + 4*Math.random()));		  
+			}
+		}
+
+		function tick(time){
+			if (firstTime) {
+				firstTime = false;
+				lastTime = time;
+			}
+
+			dt = time - lastTime;
+			lastTime = time;
+
+			Browser.setDescription(step);
+
+			if (step >= nSteps) {
+//			  Timer.stopTime = time;
+			}
+			else step++;
+
+			for (var i=0; i<nParticles; i++){
+				var x = Particles.children[i].translation.x;
+				var y = Particles.children[i].translation.y;
+				var z = Particles.children[i].translation.z;
+
+				var nx = x + v[i].x * dt;
+				if ((nx < -hx) || (nx > hx)) {
+					nx = x;
+					v[i].x = -v[i].x;
+				}
+
+				var ny = y + v[i].y * dt;
+				if ((ny < -hy) || (ny > hy)) {
+					ny = y;
+					v[i].y = -v[i].y;
+				}
+
+				var nz = z + v[i].z * dt;
+				if ((nz < -hz) || (nz > hz)) {
+					nz = z;
+					v[i].z = -v[i].z;
+				}
+
+				Particles.children[i].translation = new SFVec3f(nx, ny, nz);
+			}
+
+
+//			for (var i=0; i<nParticles; i++){			  
+//				v[i] = new SFVec3f(sdf*(-2 + 4*Math.random()),
+//													 sdf*(-2 + 4*Math.random()),
+//													 sdf*(-2 + 4*Math.random()));		  
+//			}
+		}
+	"
+}
+]
+}
+
+DEF	B1 Group{
+	children [
+Transform	{
+  translation	-3.5 1.5 0
+	children [
+
+DEF	Box1 Transform	{
+	children [
+		Shape	{
+			geometry DEF box1 IndexedLineSet	{
+				coord	Coordinate {}
+				coordIndex [
+					0 1 2 3 0 4 5 6 7 4	-1
+					3 7 -1
+					2 6 -1
+					1 5 -1
+				]
+			}
+			appearance Appearance	{
+				material Material	{
+					emissiveColor	.5 .5 .5
+				}
+			}
+		}
+	]
+}
+
+DEF	Particles1 Transform	{}
+
+]}
+
+DEF	Timer1 TimeSensor {
+	cycleInterval	1
+	loop TRUE
+}
+
+DEF	Builder1 Script {
+	eventIn	SFTime tick
+	field	SFNode Timer USE Timer1
+	field	SFNode box USE box1
+	field	SFNode Particles USE Particles1
+	url	"javascript:
+		var boxSize = new SFVec3f(5, 4, 4);
+		var hx = boxSize.x/2;
+		var hy = boxSize.y/2;
+		var hz = boxSize.z/2;
+		var nParticles = 100;
+		var boxVertex = new MFVec3f();
+		var boxIndex = new MFInt32();
+		var firstTime = true;
+		var lastTime = 0;
+		var dt = 0.0;
+		var v = new MFVec3f();
+		var sdf = .7;
+
+		var nSteps = 0;
+		var step = 0;
+
+		function initialize(){
+			boxVertex[0] = new SFVec3f(-hx, -hy,  hz);
+			boxVertex[1] = new SFVec3f( hx, -hy,  hz);
+			boxVertex[2] = new SFVec3f( hx,  hy,  hz);
+			boxVertex[3] = new SFVec3f(-hx,  hy,  hz);
+			boxVertex[4] = new SFVec3f(-hx, -hy, -hz);
+			boxVertex[5] = new SFVec3f( hx, -hy, -hz);
+			boxVertex[6] = new SFVec3f( hx,  hy, -hz);
+			boxVertex[7] = new SFVec3f(-hx,  hy, -hz);
+
+			box.coord.point = boxVertex;
+
+			objString = 'Transform{children Shape{geometry Sphere{radius .04}appearance Appearance{material Material{diffuseColor 0 0 0}}}}';
+
+			for (var i=0; i<nParticles; i++){
+				newNode = Browser.createVrmlFromString(objString);
+				Particles.children[i] = newNode[0];
+				Particles.children[i].translation = new SFVec3f(2*hx*(-.5 + Math.random()), 
+															  2*hy*(-.5 + Math.random()), 
+															  2*hz*(-.5 + Math.random()));
+			  
+				v[i] = new SFVec3f(sdf*(-2 + 4*Math.random()),
+													 sdf*(-2 + 4*Math.random()),
+													 sdf*(-2 + 4*Math.random()));		  
+			}
+		}
+
+		function tick(time){
+			if (firstTime) {
+				firstTime = false;
+				lastTime = time;
+			}
+
+			dt = time - lastTime;
+			lastTime = time;
+
+			Browser.setDescription(step);
+
+			if (step >= nSteps) {
+//			  Timer.stopTime = time;
+			}
+			else step++;
+
+			for (var i=0; i<nParticles; i++){
+				var x = Particles.children[i].translation.x;
+				var y = Particles.children[i].translation.y;
+				var z = Particles.children[i].translation.z;
+
+				var nx = x + v[i].x * dt;
+				if ((nx < -hx) || (nx > hx)) {
+					nx = x;
+					v[i].x = -v[i].x;
+				}
+
+				var ny = y + v[i].y * dt;
+				if ((ny < -hy) || (ny > hy)) {
+					ny = y;
+					v[i].y = -v[i].y;
+				}
+
+				var nz = z + v[i].z * dt;
+				if ((nz < -hz) || (nz > hz)) {
+					nz = z;
+					v[i].z = -v[i].z;
+				}
+
+				Particles.children[i].translation = new SFVec3f(nx, ny, nz);
+			}
+
+
+//			for (var i=0; i<nParticles; i++){			  
+//				v[i] = new SFVec3f(sdf*(-2 + 4*Math.random()),
+//													 sdf*(-2 + 4*Math.random()),
+//													 sdf*(-2 + 4*Math.random()));		  
+//			}
+		}
+	"
+}
+]
+}
+
+
+ROUTE	Timer.time TO	Builder.tick
+ROUTE	Timer1.time TO	Builder1.tick

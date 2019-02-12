@@ -1,0 +1,57 @@
+#VRML V2.0 utf8
+
+Viewpoint	{
+  fieldOfView	.1
+}
+
+Transform	{
+  children [
+	  Transform	{
+			translation	0 0 0
+		  children [
+			  Shape	{
+				  geometry SplineSphere {radius .3}
+					appearance Appearance	{
+					  material Material	{
+						  emissiveColor	.5 .5 .5
+						}
+					}
+				}
+			]
+		}
+
+		Transform	{
+			translation	.35 0 0
+			scale	1 1.5 1
+			rotation 0 0 1 1.57
+		  children [
+			  Shape	{
+				  geometry IndexedFaceSet	{
+					  coord	Coordinate {
+						  point	[
+							  -0.02  0    0
+								 0.02  0    0
+								 0.02 -0.04 0
+								 0.04	-0.04 0
+								 0    -0.10 0
+							  -0.04 -0.04 0
+						    -0.02 -0.04 0
+						    -0.02  0    0	 
+							]
+						}
+						coordIndex [
+						  0 1 2 3 4 5 6 0
+						]
+						solid	FALSE
+					}
+					appearance Appearance	{
+					  material Material	{
+						  diffuseColor 1 0 0
+						}
+					}
+				}
+			]
+		}
+
+	]
+}

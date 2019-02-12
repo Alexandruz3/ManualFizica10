@@ -1,0 +1,532 @@
+#VRML V2.0 utf8
+
+NavigationInfo {
+  type ["EXAMINE", "ANY"]
+	avatarSize [1 1 1 0 0 0]
+}
+
+EXTERNPROTO GlueToView [
+   eventIn      SFVec3f    set_translation
+   eventIn      SFVec3f    set_scale
+   exposedField MFNode     children
+   exposedField SFRotation rotation 
+   field        SFVec3f    translation 
+   field        SFVec3f    scale      
+   eventOut     SFVec3f    translation_changed
+   eventOut     SFVec3f    scale_changed 
+] "GlueToViewPROTO.wrl"
+
+PROTO Lever [
+	eventIn	SFFloat	set_axis
+	eventIn	SFFloat	set_max
+	eventIn	SFFloat	set_min
+	eventIn	SFFloat	set_offset
+
+	eventOut SFRotation	joint_rotation
+	eventOut SFFloat value_changed
+
+	exposedField MFString label "Acc"
+
+	field SFFloat axis 0
+	field SFFloat max 1
+	field SFFloat min 0
+	field SFFloat offset 0
+]
+{
+	Group {
+    	children [
+
+			# Label
+    		Transform {
+				translation 0 -0.5 0
+				children Shape {
+					appearance Appearance {
+	    				material Material {  diffuseColor .5 .5 .5}
+					}
+					geometry DEF TEXT Text {
+		    			string IS label
+		    			fontStyle FontStyle {size 0.34  family "SANS" style "BOLD" justify "MIDDLE"}
+							
+					}
+				}
+    		}
+
+			# Lever
+			Group {
+        		children [
+					Transform {
+					    rotation 1 0 0 -2.2
+	    				children Transform {
+		    				rotation 0 0 1 1.5708
+	    					children [
+								DEF LEVER Transform { 
+									children [
+
+										# Lever arm
+        	    						Transform {
+        	    							children Shape {
+        										appearance DEF LEVERARMAPP Appearance {
+													material Material {
+			    										diffuseColor .3 .3 .5
+			    										specularColor .7 .7 .8
+			    										shininess 0.1
+													}
+												}
+        										geometry Cylinder {radius .1 height 1}
+        	    							}
+        	    							rotation 0 0 1 1.5708
+        	    							translation -.5 0 0
+        	    						}
+
+										# Lever knob
+        	    						Transform {
+        	    						translation -1 0 0
+        	    							children Shape {
+												appearance Appearance {
+													material Material {
+			    										diffuseColor .8 .1 .1
+			    										specularColor .9 .7 .5
+			    										shininess .2
+													}
+												}
+        										geometry Sphere {radius .2}
+        	    							}
+        	    						}
+									]
+								}
+
+								# Lever base
+        						Transform {
+        							children Shape {
+		    							appearance USE LEVERARMAPP
+        	    						geometry Cylinder {radius .2 height .3}
+        							}
+        						}
+	    					]
+	    				}
+					}
+					DEF LEVERSENSOR PlaneSensor {
+	    				minPosition 0 -1
+            			maxPosition 0 1
+					}
+        		]
+    		}
+
+    		DEF CONTROL Script {
+			eventIn  SFFloat	set_axis
+			eventIn  SFFloat	set_max
+			eventIn  SFFloat	set_min
+			eventIn  SFFloat	set_offset
+			eventIn  SFVec3f	set_translation
+			eventOut SFFloat	value_changed IS value_changed
+			eventOut SFRotation	joint_rotation IS joint_rotation
+			eventOut SFRotation	lever_rotation
+			field	 SFFloat	axis IS axis
+			field	 SFFloat	max IS max
+			field	 SFFloat	min IS min
+			field	 SFFloat	offset IS offset
+			field	 SFFloat	lastvalue 0
+			field	 SFFloat	lr 0
+			url	[ "javascript:
+
+			  function set_axis(value)   {axis   = value;}
+			  function set_max(value)    {max    = value;}
+			  function set_min(value)    {min    = value;}
+			  function set_offset(value) {offset = value;}
+
+			  function set_translation(value) {
+	    		y = value[1];
+	    		lr = Math.atan(y);
+
+	    		lever_rotation[0] = 0;
+	    		lever_rotation[1] = 1;
+	    		lever_rotation[2] = 0;
+            	lever_rotation[3] = lr;
+
+				// map lever rotation to joint rotation
+	    		jr = min + (2.*lr/Math.PI + 0.5) * (max - min) + offset;
+	    		value_changed = jr;
+
+	    		a1 = 1;
+	    		if (jr < 0.) {a1 = -a1;}
+	    		jr = Math.abs(jr);
+	    		joint_rotation[3] = jr;
+
+				// switch axes around
+ 	    		if (axis == 0) {
+	    		  joint_rotation[0] = 0;
+	    		  joint_rotation[1] = a1;
+	    		  joint_rotation[2] = 0;
+	    		}
+	    		if (axis == 1) {
+	    		  joint_rotation[0] = a1;
+	    		  joint_rotation[1] = 0;
+	    		  joint_rotation[2] = 0;
+	    		}
+	    		if (axis == 2) {
+	    		  joint_rotation[0] = 0;
+	    		  joint_rotation[1] = 0;
+	    		  joint_rotation[2] = a1;
+            	}
+			  }
+        	"
+		]
+    		}
+    	]
+	}
+
+	ROUTE LEVERSENSOR.translation_changed TO CONTROL.set_translation
+	ROUTE CONTROL.lever_rotation TO LEVER.set_rotation
+}
+
+#DirectionalLight {
+#	direction 0 -1 0
+#}
+
+DEF	Engine Transform {
+	translation	0 1.5 0
+	scale .9 .9 .9
+	rotation 0 1 0 .3
+	children [
+		DEF	Cylinder Transform {
+			children [
+				Shape {
+					geometry Cylinder {
+						radius 1.03
+						height 4.4
+						bottom FALSE
+					}
+					appearance Appearance {
+						material Material {
+							diffuseColor .3 .3 .3
+							specularColor 1 .9 .5
+							emissiveColor .4 .4 .4
+							ambientIntensity 0
+							shininess .8
+							transparency .3
+						}
+					}
+				}
+			]
+		}
+		DEF	Piston Transform {
+			children [
+				Shape {
+					appearance Appearance {
+						material DEF Metal Material {
+							diffuseColor .7 .7 .7
+							shininess .2
+							specularColor .8 .7 .8
+						}
+					}
+					geometry Extrusion {
+						crossSection [
+							 1  0,  .924  .383,  .707  .707,  .383  .924,
+							 0  1, -.383  .924, -.707  .707, -.924  .383,
+							-1  0, -.924 -.383, -.707 -.707, -.383 -.924,
+							 0 -1,  .383 -.924,  .707 -.707,  .924 -.383,
+							 1  0
+						]
+						spine [
+							0  1.1  0, 
+							0  1    0, 
+							0   .8  0, 
+							0   .79 0, 
+							0   .71 0, 
+							0   .7  0, 
+							0   .6  0,
+							0   .59 0,
+							0   .51 0,
+				    		0   .5  0, 
+							0 -1    0, 
+							0  -.99 0,
+				    		0   .8  0, 
+							0   .9  0
+						]
+						scale [
+							.3 .3, 
+							1 1, 
+							1 1, 
+							.97 .97, 
+							.97 .97, 
+							1 1, 
+							1 1, 
+							.97 .97, 
+							.97 .97, 
+							1 1, 
+							1 1, 
+							.95 .95, 
+							.95 .95, 
+							.3 .3
+						]
+						creaseAngle	1
+						ccw	FALSE
+					}
+				}
+				Transform {
+					rotation 0 0 1 1.57
+					children [
+						Shape {
+							geometry Cylinder {
+								radius .2
+								height 2
+							}
+							appearance Appearance {
+								material Material {
+									diffuseColor .5 .5 .5
+									shininess 1
+									specularColor .8 .8 .8
+								}
+							}
+						}
+					]
+				}
+				Transform {
+					translation	-.55 0 0
+					rotation 0 0 1 1.57
+					children [
+						DEF bolt Shape {
+							appearance Appearance {
+								material Material {
+									diffuseColor .8 .8 .8
+									shininess 1
+									specularColor 1 1 1
+								}
+							}
+							geometry Cylinder {
+								radius .3
+								height .7
+							}
+						}
+					]
+				}
+				Transform {
+					translation	.55 0 0
+					rotation 0 0 1 1.57
+					children USE bolt
+				}
+				Transform {
+					translation	0 .75 0
+					children [
+						DEF Segment Shape {
+							appearance Appearance {
+								material Material {
+									diffuseColor .5 .5 .5
+									shininess 1
+									specularColor .8 .8 .8
+								}
+							}
+							geometry Extrusion {
+								crossSection [
+									.04 .03,
+									-.04 .03,
+									-.04 -.03,
+									.04 -.03
+									.04 .03
+								]
+								spine [
+									 1  0 0,  .924  0 .383,  .707 0 .707,  .383 0 .924,
+									 0 0 1, -.383 0 .924, -.707 0 .707, -.924 0 .383,
+									-1 0 0, -.924 0 -.383, -.707 0 -.707, -.383 0 -.924,
+									 0 0 -1,  .383 0 -.924,  .707 0 -.707,  .924 0 -.383,
+									 1 0 0					
+								]
+								creaseAngle	1
+								ccw	FALSE
+							}
+						}
+					]
+				}
+				Transform {
+					translation	0 .55 0
+					children USE Segment
+				}
+			]
+		}
+		DEF	Shaft Transform	{
+			children [
+				Shape {
+					geometry Box {
+						size .3 4.2 .5
+					}
+					appearance Appearance {
+						material USE Metal
+					}
+				}
+			]
+		}
+		DEF	Crank Transform	{
+			translation	0 -4 0
+			children [
+				DEF Exc1 Transform {
+					translation	-.4 0 0
+					children DEF Exc Shape {
+						geometry Box {
+							size .3 3 .8
+						}
+						appearance Appearance {
+							material USE Metal
+						}
+					}
+				}	
+				DEF Exc2 Transform {
+					translation	.4 0 0
+					children USE Exc
+				}
+				DEF	Bolt Transform {
+					translation	0 1 0
+					rotation 0 0 1 1.571
+					children Shape {
+						geometry Cylinder {
+							radius .2
+							height 1.2
+						}
+						appearance Appearance { material USE Metal }
+					}
+				}
+				DEF	Rod1 Transform {
+					translation	-1.25 0 0
+					rotation 0 0 1 1.571
+					children DEF Rod Shape {
+						geometry Cylinder {
+							radius .3
+							height 2
+						}
+						appearance Appearance { material USE Metal }
+					}
+				}
+				DEF	Rod2 Transform {
+					translation	1.25 0 0
+					rotation 0 0 1 1.571
+					children USE Rod
+				}
+			]
+		}
+	]
+}
+
+DEF	Throtle GlueToView {
+	translation	5 -3 5
+	children [
+		DEF ThrotleLever Lever {}
+	]
+}
+
+DEF	Timer TimeSensor {
+	cycleInterval 1
+	loop TRUE
+	stopTime -1
+}
+
+DEF	ScaleTime Script{
+
+	eventIn	SFTime set_time
+	eventIn	SFFloat	set_timeScale
+
+	eventOut SFFloat scaledFraction
+	eventOut SFFloat pitch_changed
+	
+	field SFFloat frac 0
+	field SFTime last_time 0
+	field SFFloat scaleTimeFactor .5
+	
+	url	"javascript:
+	
+		function set_timeScale (f) {
+			scaleTimeFactor = f;
+			pitch_changed = .5 + f;
+		}
+
+		function set_time(t){
+			frac += (t - last_time) * scaleTimeFactor;
+			if (frac > 1.0) {
+				frac = frac - Math.round(frac); 
+			}  
+			scaledFraction = frac;
+			last_time = t;
+		} 
+	"
+}
+
+DEF	Mover Script {
+	eventIn	SFFloat	set_fraction
+	
+	eventOut SFVec3f pistonPos_changed
+	eventOut SFVec3f shaftPos_changed
+	eventOut SFRotation	shaftRot_changed
+	eventOut SFRotation	crankRot_changed
+
+	field SFFloat y 1
+	field SFFloat ShaftLength 4.2
+	field SFFloat ShaftOffset 0
+	field SFFloat ShaftAngle 0
+	field SFFloat CrankAngle 0
+	field SFFloat CrankOffset 0
+	field SFFloat CrankRadius 1
+	field SFTime Time 0
+
+	url	"javascript:
+
+		function initialize(){
+			CrankOffset = Math.sqrt(ShaftLength * ShaftLength - CrankRadius * CrankRadius);
+		}
+		
+		function set_fraction(f) {
+			var a = 0.0;
+			var b = 0.0;
+			var c = 0.0;
+			CrankAngle = 4 * Math.PI * f;
+			y = Math.cos(CrankAngle);
+			a = CrankRadius * y;
+			b = CrankRadius * Math.sin(CrankAngle);
+			c = CrankOffset + y - a;
+			ShaftAngle = Math.atan(b/c);
+
+			pistonPos_changed = new SFVec3f(0, y, 0);
+
+			ShaftOffset = y - ShaftLength / 2;
+			shaftPos_changed = new SFVec3f(0, ShaftOffset, -ShaftLength/2 * Math.sin(ShaftAngle));
+			shaftRot_changed = new SFRotation(1, 0, 0, ShaftAngle);
+			
+			crankRot_changed = new SFRotation(1, 0, 0, -CrankAngle);
+		}
+	"
+}
+
+#Sound {
+#	source DEF intake AudioClip {
+#		url "inflate.wav"
+#		pitch .5
+#	}
+#	minBack 10
+#	minFront 10
+#	maxBack 10
+#	maxFront 10
+#	spatialize FALSE
+#}
+#Sound {
+#	source DEF compress AudioClip {
+#		url "whip.wav"
+#		pitch 10
+#	}
+#	minBack 10
+#	minFront 10
+#	maxBack 10
+#	maxFront 10
+#	spatialize FALSE
+#}
+
+
+ROUTE ThrotleLever.value_changed TO	ScaleTime.set_timeScale
+ROUTE Timer.time TO	ScaleTime.set_time
+
+ROUTE ScaleTime.scaledFraction TO Mover.set_fraction
+
+ROUTE Mover.pistonPos_changed TO Piston.set_translation
+ROUTE Mover.shaftPos_changed TO	Shaft.set_translation
+ROUTE Mover.shaftRot_changed TO	Shaft.set_rotation
+ROUTE Mover.crankRot_changed TO	Crank.set_rotation
+
+
+
+

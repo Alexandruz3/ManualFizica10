@@ -1,0 +1,61 @@
+#VRML V2.0 utf8
+
+#EXTERNPROTO Arc [
+#  field SFVec3f centerAt
+#  field SFFloat radius
+#  field SFFloat startAt
+#  field SFFloat angle
+#  field SFInt32 resolution
+#  field SFColor color
+#]"p_arc.wrl" 
+
+PROTO Arc [
+  field SFVec3f centerAt 0 0 0
+  field SFFloat radius 0.01
+  field SFFloat startAt 0
+  field SFFloat angle 45
+  field SFInt32 resolution 100
+  field SFColor color 0 0 0
+] 
+{
+  
+  Shape {
+    geometry DEF geom IndexedLineSet {
+      coord Coordinate {}
+    }
+    appearance Appearance {
+      material Material {
+        emissiveColor IS color
+      }
+    }
+  }
+
+  DEF Builder Script {
+    field SFVec3f centerAt IS centerAt
+    field SFFloat radius IS radius
+    field SFFloat startAt IS startAt
+    field SFFloat angle IS angle
+    field SFInt32 resolution IS resolution
+    field SFNode geom USE geom
+    url "javascript:
+      var a = angle * Math.PI / 180.0;
+      var da = a / resolution;
+      var points = new MFVec3f();
+      var indexes = new MFInt32();
+      a = startAt * Math.PI / 180.0;
+      function initialize(){
+        for (i=0; i<= resolution; i++){
+          points[i] = new SFVec3f(centerAt.x + radius * Math.cos(a), 
+                                  centerAt.y + radius * Math.sin(a),
+                                  centerAt.z);
+          a += da;
+          indexes[i] = i;
+        }
+        geom.coord.point = points;
+        geom.coordIndex = indexes;
+      }
+    "
+  }
+
+}
+

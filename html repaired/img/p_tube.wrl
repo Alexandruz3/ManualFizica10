@@ -1,0 +1,76 @@
+#VRML V2.0 utf8
+
+#EXTERNPROTO	Tube [
+#	field	SFFloat	extRadius
+#	field	SFFloat	intRadius
+#	field	SFFloat	height
+#	field	SFInt32	resolution
+#	field	SFNode  app
+#]"p_tube.wrl"	
+
+PROTO	Tube [
+	field	SFFloat	extRadius .1
+	field	SFFloat	intRadius .095
+	field	SFFloat	height .2
+	field	SFInt32	resolution 100
+	field	SFNode  app Appearance {material Material	{}}
+]	
+{
+	DEF	Disk Transform {
+		children [
+			Shape	{
+				geometry DEF extrusion Extrusion {
+					creaseAngle	1
+					beginCap FALSE
+					endCap FALSE
+				}
+        appearance IS	app
+			}
+		]
+	}
+
+	DEF	Builder Script {
+		field	SFFloat	extRadius IS extRadius
+		field	SFFloat	intRadius IS intRadius
+		field	SFFloat	height IS	height
+		field	SFInt32	resolution IS	resolution
+		field	MFNode extrusion USE extrusion
+
+		eventOut MFVec2f crossSection_changed
+		eventOut MFVec3f spine_changed
+
+		url	"javascript:
+
+			function initialize(){
+				generateCrossSection();
+				generateSpine();
+			}
+
+			function generateCrossSection(){
+				var a = (extRadius - intRadius) / 2;
+				var h = height / 2;
+				crossSection_changed[0] = new SFVec2f(-a, h);
+				crossSection_changed[1] = new SFVec2f(a, h);
+				crossSection_changed[2] = new SFVec2f(a, -h);
+				crossSection_changed[3] = new SFVec2f(-a, -h);
+				crossSection_changed[4] = new SFVec2f(-a, h);
+			}
+
+			function generateSpine(){
+				var angle = 0.0;
+				var delta = 2 * Math.PI / resolution;
+				var r = (intRadius + extRadius) / 2;
+				for (var i = 0; i < resolution; i++) {
+					spine_changed[i] = new SFVec3f(r * Math.cos(angle), 0, -r * Math.sin(angle));
+					angle += delta;
+				}
+				spine_changed[resolution] = new SFVec3f(r, 0, 0);
+			}
+
+		"
+	}
+
+	ROUTE Builder.crossSection_changed TO extrusion.set_crossSection
+	ROUTE Builder.spine_changed TO extrusion.set_spine
+} 
+

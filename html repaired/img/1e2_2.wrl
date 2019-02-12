@@ -1,0 +1,255 @@
+#VRML V2.0 utf8
+
+EXTERNPROTO Vector [
+  eventIn SFVec3f setStart
+  eventIn SFVec3f setEnd
+  eventIn SFColor setStemColor
+  eventIn SFFloat setStemTransparency
+  eventIn SFColor setHeadColor
+  eventIn SFFloat setHeadTransparency
+  field SFVec3f startAt
+  field SFVec3f endAt
+  field SFFloat stemRadius
+  field SFFloat headSize
+  field SFFloat headRadius
+  field SFColor stemColor
+  field SFFloat stemTransparency
+  field SFColor headColor
+  field SFFloat headTransparency
+]"p_vector01.wrl"
+
+EXTERNPROTO Arc [
+  field SFVec3f centerAt
+  field SFFloat radius
+  field SFFloat startAt
+  field SFFloat angle
+  field SFInt32 resolution
+  field SFColor color
+]"p_arc.wrl" 
+
+EXTERNPROTO Arrow [
+  field SFVec3f position
+  field SFFloat arrowAngle
+  field SFFloat arrowLenght
+  field SFColor color
+  field SFFloat lenght
+]"p_arrow.wrl"
+
+Viewpoint	{
+	position 0 0 9
+#  fieldOfView	1
+}
+
+DirectionalLight {
+  direction	.1 -1 0
+	intensity	.5
+}
+
+Transform	{
+	translation	-1 -1 0
+	rotation 1 0 0 .2
+	children [
+		Transform	{
+			rotation 0 1 0 -.6
+		  children [
+				Vector {
+  				startAt	0 0 0
+					endAt	6 0 0
+					stemColor	0 0 0
+					headColor	0 0 0
+				}
+				Vector {
+  				startAt	0 0 0
+					endAt	0 4.5 0
+					stemColor	0 0 0
+					headColor	0 0 0
+				}
+				Vector {
+  				startAt	0 0 0
+					endAt	0 0	5
+					stemColor	0 0 0
+					headColor	0 0 0
+				}
+
+				Transform	{
+					translation	2 1 1.5
+		  		children [
+			  		Shape	{
+				  		geometry Box {size 4 2 3}
+							appearance Appearance	{
+					  		material Material	{
+						  		transparency .5
+								}
+							}
+						}
+					]
+				}
+
+				Transform	{
+					translation	4 2 3
+				  children [
+					  Shape	{
+						  geometry Sphere	{radius	.1}
+							appearance Appearance	{
+							  material Material	{
+									diffuseColor .5 .5 .5
+								}
+							}
+						}
+					]
+				}
+
+				Vector {
+  				startAt	4 2 3
+					endAt	5 2 3 
+					stemColor	1 1 1
+					headColor	1 1 1
+				}
+
+				Vector {
+  				startAt	4 2 3
+					endAt	3 2 3 
+					stemColor	1 1 1
+					headColor	1 1 1
+				}
+
+				Vector {
+  				startAt	4 2 3
+					endAt	4 3 3 
+					stemColor	1 1 1
+					headColor	1 1 1
+				}
+
+				Vector {
+  				startAt	4 2 3
+					endAt	4.0001 1 3 
+					stemColor	1 1 1
+					headColor	1 1 1
+				}
+
+				Vector {
+  				startAt	4 2 3
+					endAt	4 2 5 
+					stemColor	1 1 1
+					headColor	1 1 1
+				}
+
+				Vector {
+  				startAt	4 2 3
+					endAt	4 2 1 
+					stemColor	1 1 1
+					headColor	1 1 1
+				}
+
+				Transform	{
+					translation	4 2 3
+				  children [
+					  Shape	{
+						  geometry SplineSphere	{radius	.5}
+							appearance Appearance	{
+							  material Material	{
+								  transparency .5
+								}
+							}
+						}
+					]
+				}
+
+				Transform	{
+					translation	4 2.5 3
+				  children [
+					  Shape	{
+						  geometry Sphere	{radius	.1}
+							appearance Appearance	{
+							  material Material	{
+									diffuseColor .5 .5 .5
+								}
+							}
+						}
+					]
+				}
+
+				Vector {
+				  startAt	4 2 3
+					endAt	4 2.5 3
+					headSize 0
+					stemRadius .04
+					stemColor	0 0 0
+				}
+
+				Transform {
+					translation	4 2 4.5
+					scale	.3 .3 .3
+  				children [
+    				DEF Spin Transform {
+      				rotation 0 0 1 2.3
+      				children [
+        				Arc {
+          				centerAt 0 0 0
+          				radius 1
+          				startAt 0
+          				angle 270
+        				}
+        				Transform {
+          				translation 0 -1 0
+          				rotation 0 0 1 -1.57
+          				children [
+            				Arrow {
+              				arrowLenght .3
+              				arrowAngle .4
+            				}
+          				]
+        				}
+      				]
+    				}
+  				]
+				}
+				Transform	{
+				  translation	4 2.01 4.5
+					scale	.3 .3 .3
+					children USE Spin
+				}
+				Transform	{
+					rotation 0 1 0 3.14
+				  translation	4 2.01 4.5
+					scale	.3 .3 .3
+					children USE Spin
+				}
+
+				Transform	{
+					rotation 0 1 0 3.14
+				  translation	4 2 4.5
+					scale	.3 .3 .3
+					children USE Spin
+				}
+
+				Transform	{
+					rotation 0 1 0 1.57
+					translation	4.5 2 3
+					scale	.3 .3 .3
+				  children USE Spin
+				}
+				Transform	{
+					rotation 0 1 0 1.57
+					translation	4.5 2.01 3
+					scale	.3 .3 .3
+				  children USE Spin
+				}
+
+				Transform	{
+					rotation 0 1 0 -1.57
+					translation	4.5 2 3
+					scale	.3 .3 .3
+				  children USE Spin
+				}
+				Transform	{
+					rotation 0 1 0 -1.57
+					translation	4.5 2.01 3
+					scale	.3 .3 .3
+				  children USE Spin
+				}
+
+			]
+		}
+	]
+}

@@ -1,0 +1,76 @@
+#VRML V2.0 utf8
+
+EXTERNPROTO SqSheet [
+	field SFInt32 nx
+	field SFInt32 ny
+	field SFFloat d
+  field SFColor color
+]"p_sqs.wrl"
+
+Viewpoint	{
+  position .0025 .0025 .2
+	fieldOfView	.1
+}
+
+SqSheet	{
+  nx 30
+	ny 20
+	d	.005
+	color	0 0 0
+}
+
+DEF	Particles Transform{}
+
+DEF	Timer TimeSensor {
+  cycleInterval	1
+	loop TRUE
+}
+
+DEF	Builder Script{
+  eventIn	SFTime tick
+	field	SFNode Timer USE Timer
+	field	SFNode Particles USE Particles
+	url	"javascript:
+	  var nParticles = 200;
+		var nSteps = 5000;
+		var step = 0;
+
+		function initialize(){
+			objString = 'Transform{children Shape{geometry Sphere{radius 5e-5}appearance Appearance{material Material{}}}}';
+		  for (var i=0; i<nParticles; i++){
+				newNode = Browser.createVrmlFromString(objString);
+				Particles.children[i] = newNode[0];
+				Particles.children[i].translation.x = .005 * Math.random();
+				Particles.children[i].translation.y = .005 * Math.random();
+				Particles.children[i].translation.z = 0;
+			}
+
+		}
+
+		function tick(time){
+
+			Browser.setDescription(step);
+
+			for (var i=0; i<nParticles; i++) {
+			  var x = Particles.children[i].translation.x;
+				var y = Particles.children[i].translation.y;
+				var z = Particles.children[i].translation.z;
+				var nx = x + .1e-3*(-.5 + Math.random());
+				var ny = y + .1e-3*(-.5 + Math.random());
+				var nz = z;
+
+				Particles.children[i].translation = new SFVec3f(nx, ny, nz);
+
+			}
+
+			if (step >= nSteps) {
+			  Timer.stopTime = time;
+			}
+			else step++;
+
+		}
+
+	"
+}
+
+ROUTE	Timer.time TO	Builder.tick

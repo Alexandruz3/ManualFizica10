@@ -1,0 +1,172 @@
+#VRML V2.0 utf8
+
+Viewpoint	{
+	position 0 0 30
+  fieldOfView	.2
+}
+
+EXTERNPROTO Vector [
+  eventIn SFVec3f setStart
+  eventIn SFVec3f setEnd
+  eventIn SFColor setStemColor
+  eventIn SFFloat setStemTransparency
+  eventIn SFColor setHeadColor
+  eventIn SFFloat setHeadTransparency
+  field SFVec3f startAt
+  field SFVec3f endAt
+  field SFFloat stemRadius
+  field SFFloat headSize
+  field SFFloat headRadius
+  field SFColor stemColor
+  field SFFloat stemTransparency
+  field SFColor headColor
+  field SFFloat headTransparency
+]"p_vector01.wrl"
+
+EXTERNPROTO Label[
+  field MFString text
+  field MFString sub
+  field SFVec3f position
+  field SFFloat size
+  field SFColor color
+]"p_label.wrl"
+
+EXTERNPROTO DLine [
+  field SFVec3f startAt
+  field SFVec3f endAt
+  field SFColor color
+  field SFInt32 steps
+]"p_dline.wrl"
+
+Transform	{
+	translation	-3 -2.3 0
+  children [
+
+		Label{
+			text "V"
+		  position 5 -.4 0
+			size .4
+			color	0 0 0
+	  }
+		Label{
+			text "p"
+		  position -.2 5 0
+			size .4
+			color	0 0 0
+	  }
+
+		Label{
+			text "0"
+		  position -.2 -.4 0
+			size .4
+			color	0 0 0
+	  }
+
+		Label{
+			text "f"
+		  position 4.2 1.35 0
+			size .4
+			color	0 0 0
+	  }
+
+		Label{
+			text "i"
+		  position 2.25 3.65 0
+			size .4
+			color	0 0 0
+	  }
+
+
+	  Vector {
+		  startAt	0 0 0
+			endAt	5 0 0
+			stemRadius .01
+			stemColor	0 0 0
+			headColor	0 0 0
+		}
+	  Vector {
+		  startAt	0 0 0
+			endAt	0 5 0
+			stemRadius .01
+			stemColor	0 0 0
+			headColor	0 0 0
+		}
+    Shape	{
+		  geometry DEF Ext Extrusion {
+			  crossSection [
+				  .01  .01
+					.01 -.01
+				 -.01 -.01
+				 -.01  .01
+				  .01  .01
+				]
+			}
+			appearance Appearance	{
+			  material Material	{
+				  diffuseColor 1 0 0
+				}
+			}
+		}
+
+		DEF	Builder Script {
+		  field	SFNode Ext USE Ext
+			eventOut MFVec3f spine_changed
+			directOutput TRUE
+			url	"javascript:
+			  var n = 100;
+				var dx = 2/n;
+			  function initialize(){
+					for (i=0; i<=n; i++){
+						x = 2 + i * dx;
+						y = 10/Math.pow(x,1.4);
+					  spine_changed[i] = new SFVec3f(x, y, 0);
+					} 
+			  }
+			"
+			ROUTE	Builder.spine_changed	TO Ext.set_spine
+		}
+
+		Transform	{
+			translation	4 1.445 0
+		  children DEF Point Shape {
+			  geometry SplineSphere	{ radius .05 }
+				appearance Appearance	{
+				  material Material	{
+						diffuseColor .3 .3 .3
+					}
+				}
+			}
+		}
+
+		Transform	{
+		  translation	2 3.77 0
+			children USE Point
+		}
+
+		Transform	{
+			translation	2.85 2.3 0
+			rotation 0 0 1 3.9
+		  children DEF Arr Shape {
+			  geometry IndexedFaceSet	{
+				  coord	Coordinate {
+					  point [
+						  0    0.2 0
+							0.07 0   0
+						 -0.07 0   0
+						]
+					}
+					coordIndex [
+					  0 1 2 0
+					]
+					solid	FALSE
+				}
+				appearance Appearance	{
+				  material Material	{
+					  diffuseColor 1 0 0
+					}
+				}
+			}
+		}
+
+	]
+}
